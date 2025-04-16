@@ -10,10 +10,25 @@ type albumController = controllers.AlbumController
 
 func main() {
 	router := gin.Default()
-	router.GET("/albums", func(c *gin.Context) {
-		var controller = albumController{Context: c}
-		controller.GetAlbums()
-	})
 
+	{
+		albums := router.Group("/albums")
+		{
+
+			albums.GET("", func(ctx *gin.Context) {
+				var controller = albumController{Context: ctx}
+				controller.GetAlbums()
+			})
+			albums.POST("", func(ctx *gin.Context) {
+				var controller = albumController{Context: ctx}
+				controller.PostAlbums()
+			})
+			albums.GET("/:id", func(ctx *gin.Context) {
+				var controller = albumController{Context: ctx}
+				controller.GetAlbumByID()
+			})
+		}
+
+	}
 	router.Run("localhost:8080")
 }
